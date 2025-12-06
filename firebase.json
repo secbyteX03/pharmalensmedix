@@ -1,0 +1,51 @@
+{
+  "hosting": {
+    "public": "public",
+    "site": "pharmalensmedix",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ],
+    "cleanUrls": true,
+    "trailingSlash": false
+  },
+  "functions": {
+    "source": "functions",
+    "secrets": ["GOOGLE_GENAI_API_KEY"]
+  },
+  "firestore": {
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
+  },
+  "emulators": {
+    "auth": {
+      "port": 9199
+    },
+    "firestore": {
+      "port": 8181
+    },
+    "functions": {
+      "port": 6001
+    },
+    "hosting": {
+      "port": 6000
+    },
+    "ui": {
+      "enabled": true,
+      "port": 4100
+    },
+    "logging": {
+      "port": 4600
+    },
+    "hub": {
+      "port": 4300
+    }
+  }
+}

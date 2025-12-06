@@ -1,0 +1,18 @@
+{
+  "projects": {
+    "default": "pharmalensmedix",
+    "pharmalensmedix": "pharmalensmedix",
+    "pamalensmedix": "pharmalensmedix",
+    "pjarmalens": "pharmalensmedix"
+  },
+  "targets": {
+    "pharmalensmedix": {
+      "hosting": {
+        "pharmalensmedix": [
+          "pharmalensmedix"
+        ]
+      }
+    }
+  },
+  "etags": {}
+}
