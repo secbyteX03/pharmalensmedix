@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pharmalens - Smart Pill Identifier</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #00897b;
+            --primary-dark: #00695c;
+            --primary-light: #4db6ac;
+            --accent: #26a69a;
+            --bg-gradient: linear-gradient(135deg, #dadbe2 0%, #e2dde7 100%);
+            --text-dark: #2c3e50;
+            --text-light: #7f8c8d;
+            --shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            --shadow-hover: 0 15px 50px rgba(0, 0, 0, 0.15);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #dadbe2 0%, #c6c3c9 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .app-container {
+            background: white;
+            width: 100%;
+            max-width: 900px;
+            padding: 0;
+            border-radius: 24px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            animation: slideUp 0.5s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Header with Logo */
+        .header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            padding: 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+        }
+
+        .logo-container {
+            margin-bottom: 15px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .logo {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+        }
+
+        .header h1 {
+            color: #ffa500;
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header h1 i {
+            margin-right: 10px;
+        }
+
+        .header p {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 0.95rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+            background: #f8f9fa;
+            padding: 5px;
+            border-radius: 12px;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 12px;
+            text-align: center;
+            cursor: pointer;
+            color: var(--text-light);
+            font-weight: 600;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+        }
+
+        .tab i {
+            margin-right: 8px;
+        }
+
+        .tab:hover {
+            background: rgba(0, 137, 123, 0.1);
+            color: var(--primary);
+        }
+
+        .tab.active {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 4px 12px rgba(0, 137, 123, 0.3);
+        }
+
+        /* Inputs */
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        select,
+        input[type="text"] {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        select:focus,
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(0, 137, 123, 0.1);
+        }
+
+        /* File Upload */
+        .file-upload {
+            border: 3px dashed var(--primary-light);
+            padding: 40px 20px;
+            text-align: center;
+            border-radius: 16px;
+            cursor: pointer;
+            background: linear-gradient(135deg, #e0f2f1 0%, #b2dfdb 100%);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .file-upload:hover {
+            border-color: var(--primary);
+            background: linear-gradient(135deg, #b2dfdb 0%, #80cbc4 100%);
+            transform: translateY(-2px);
+        }
+
+        .file-upload p {
+            font-weight: 600;
+            color: var(--primary-dark);
+            font-size: 1rem;
+            margin: 0;
+        }
+
+        .file-upload::before {
+            content: '\f030';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            display: block;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: var(--primary-dark);
+        }
+
+        .image-preview-container {
+            display: none;
+            text-align: center;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .image-preview-container.active {
+            display: block;
+        }
+
+        #preview-img {
+            max-width: 100%;
+            max-height: 300px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            margin-bottom: 15px;
+        }
+
+        .change-image-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: white;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .change-image-btn i {
+            margin-right: 8px;
+        }
+
+        .change-image-btn:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 137, 123, 0.3);
+        }
+
+        /* Button */
+        .btn-identify {
+            width: 100%;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 16px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 137, 123, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-identify:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .btn-identify:active {
+            transform: translateY(0);
+        }
+
+        .btn-identify:disabled {
+            background: linear-gradient(135deg, #ccc 0%, #999 100%);
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Loading */
+        #loading {
+            text-align: center;
+            display: none;
+            margin: 25px 0;
+            padding: 30px;
+            background: linear-gradient(135deg, #e0f2f1 0%, #b2dfdb 100%);
+            border-radius: 16px;
+            border: 2px solid var(--primary-light);
+        }
+
+        .loading-animation {
+            position: relative;
+            height: 80px;
+            margin-bottom: 20px;
+        }
+
+        .pill-container {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 80px;
+        }
+
+        .pill {
+            width: 60px;
+            height: 25px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            border-radius: 25px;
+            position: relative;
+            animation: pillScan 2s ease-in-out infinite;
+            box-shadow: 0 4px 15px rgba(0, 137, 123, 0.4);
+        }
+
+        .pill::before {
+            content: '';
+            position: absolute;
+            width: 2px;
+            height: 100%;
+            background: white;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .scan-line {
+            position: absolute;
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: scanMove 2s ease-in-out infinite;
+            box-shadow: 0 0 10px var(--accent);
+        }
+
+        .scan-particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--primary);
+            border-radius: 50%;
+            opacity: 0;
+            animation: particleFloat 2s ease-in-out infinite;
+        }
+
+        .particle:nth-child(1) {
+            left: 20%;
+            animation-delay: 0s;
+        }
+
+        .particle:nth-child(2) {
+            left: 40%;
+            animation-delay: 0.3s;
+        }
+
+        .particle:nth-child(3) {
+            left: 60%;
+            animation-delay: 0.6s;
+        }
+
+        .particle:nth-child(4) {
+            left: 80%;
+            animation-delay: 0.9s;
+        }
+
+        @keyframes pillScan {
+
+            0%,
+            100% {
+                transform: translateY(0) scale(1);
+            }
+
+            50% {
+                transform: translateY(-10px) scale(1.05);
+            }
+        }
+
+        @keyframes scanMove {
+
+            0%,
+            100% {
+                transform: translate(-50%, -50%) scaleX(0.5);
+                opacity: 0;
+            }
+
+            50% {
+                transform: translate(-50%, -50%) scaleX(1.5);
+                opacity: 1;
+            }
+        }
+
+        @keyframes particleFloat {
+            0% {
+                bottom: 0;
+                opacity: 0;
+            }
+
+            50% {
+                opacity: 1;
+            }
+
+            100% {
+                bottom: 80px;
+                opacity: 0;
+            }
+        }
+
+        .loading-status {
+            color: var(--primary-dark);
+            font-weight: 600;
+            font-size: 1rem;
+            margin-top: 10px;
+            min-height: 24px;
+            transition: all 0.3s ease;
+        }
+
+        .loading-progress {
+            width: 100%;
+            height: 6px;
+            background: rgba(0, 137, 123, 0.2);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 15px;
+        }
+
+        .loading-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            border-radius: 10px;
+            transition: width 0.5s ease;
+            box-shadow: 0 0 10px rgba(0, 137, 123, 0.5);
+        }
+
+        .loading-substatus {
+            color: var(--text-light);
+            font-size: 0.85rem;
+            margin-top: 8px;
+        }
+
+        /* Results */
+        #result-container {
+            margin-top: 25px;
+            padding: 25px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 16px;
+            animation: fadeIn 0.5s ease-out;
+            border: 2px solid #dee2e6;
+        }
+
+        #result-container h2 {
+            color: var(--primary-dark);
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            border-bottom: 3px solid var(--primary);
+        }
+
+        #result-container p {
+            margin: 12px 0;
+            line-height: 1.7;
+            padding: 10px;
+            background: white;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary-light);
+        }
+
+        #result-container strong {
+            color: var(--primary-dark);
+            font-weight: 700;
+            display: inline-block;
+            min-width: 180px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Error styling */
+        .error-message {
+            color: #c62828;
+            background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 20px;
+            border-left: 5px solid #c62828;
+        }
+
+        .error-message p {
+            margin: 0;
+            line-height: 1.6;
+        }
+
+        .error-message p:first-child {
+            font-weight: 600;
+            font-size: 1.05rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .header h1 {
+                font-size: 1.5rem;
+            }
+
+            .logo {
+                width: 60px;
+                height: 60px;
+            }
+
+            .content {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app-container">
+        <div class="header">
+            <div class="logo-container">
+                <img src="/assets/logo.png" alt="Pharmalens Logo" class="logo">
+            </div>
+            <h1><i class="fas fa-pills"></i> Pharmalens Kenya</h1>
+            <p>Smart Pill Identifier powered by AI</p>
+        </div>
+
+        <div class="content">
+            <div class="tabs">
+                <div class="tab active" onclick="setTab('photo')"><i class="fas fa-camera"></i> Scan Photo</div>
+                <div class="tab" onclick="setTab('manual')"><i class="fas fa-pen-to-square"></i> Manual Search</div>
+            </div>
+
+            <!-- PHOTO MODE -->
+            <div id="photo-mode">
+                <div class="input-group">
+                    <div class="file-upload" id="file-upload-area">
+                        <p>Tap to Take Photo or Upload</p>
+                        <input type="file" id="fileInput" accept="image/*" style="display: none;">
+                    </div>
+                    <div class="image-preview-container" id="image-preview">
+                        <img id="preview-img" alt="Uploaded medication image">
+                        <div>
+                            <button class="change-image-btn" onclick="changeImage()"><i class="fas fa-camera"></i>
+                                Analyze Another
+                                Medication</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MANUAL MODE -->
+            <div id="manual-mode" class="hidden">
+                <div class="input-group">
+                    <label>Pill Imprint (Text on pill)</label>
+                    <input type="text" id="imprint" placeholder="e.g., 'Ibu 400' or 'G 32'">
+                </div>
+                <div class="input-group">
+                    <label>Color</label>
+                    <select id="color">
+                        <option value="">Select Color</option>
+                        <option value="White">White</option>
+                        <option value="Blue">Blue</option>
+                        <option value="Red">Red</option>
+                        <option value="Yellow">Yellow</option>
+                        <option value="Green">Green</option>
+                        <option value="Orange">Orange</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>Shape</label>
+                    <select id="shape">
+                        <option value="">Select Shape</option>
+                        <option value="Round">Round</option>
+                        <option value="Oblong/Capsule">Oblong/Capsule</option>
+                        <option value="Oval">Oval</option>
+                        <option value="Square">Square</option>
+                        <option value="Diamond">Diamond</option>
+                    </select>
+                </div>
+            </div>
+
+            <button class="btn-identify" id="submitBtn" onclick="identifyPill()">Identify Medication</button>
+
+            <div id="loading">
+                <div class="loading-animation">
+                    <div class="pill-container">
+                        <div class="pill"></div>
+                        <div class="scan-line"></div>
+                        <div class="scan-particles">
+                            <div class="particle"></div>
+                            <div class="particle"></div>
+                            <div class="particle"></div>
+                            <div class="particle"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="loading-status" id="loading-status">Initializing analysis...</div>
+                <div class="loading-substatus" id="loading-substatus"></div>
+                <div class="loading-progress">
+                    <div class="loading-progress-bar" id="loading-progress-bar" style="width: 0%"></div>
+                </div>
+            </div>
+
+            <div id="result-container"></div>
+        </div>
+    </div>
+
+    <!-- Firebase SDKs -->
+    <script type="module">
+        import { app, analytics, functions } from './js/firebase-config.js';
+        import { httpsCallable } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-functions.js";
+        
+        // Initialize Cloud Function
+        const identifyFunction = httpsCallable(functions, 'identifyMedication');
+
+        // DOM Elements
+        const fileInput = document.getElementById('fileInput');
+        const fileUploadArea = document.getElementById('file-upload-area');
+        const previewImg = document.getElementById('preview-img');
+        const imagePreview = document.getElementById('image-preview');
+        const resultContainer = document.getElementById('result-container');
+        const loading = document.getElementById('loading');
+        
+        // State
+        let currentMode = 'photo';
+        let base64Image = null;
+
+        // Event Listeners
+        document.addEventListener('DOMContentLoaded', () => {
+            // File upload click handler
+            fileUploadArea.addEventListener('click', () => {
+                fileInput.click();
+            });
+
+            // File input change handler
+            fileInput.addEventListener('change', handleImageSelect);
+
+            // Initialize UI
+            updateUI();
+        });
+
+        // Update UI based on current state
+        function updateUI() {
+            // Hide loading by default
+            loading.style.display = 'none';
+            
+            // Initialize image preview
+            if (base64Image) {
+                previewImg.src = base64Image;
+                fileUploadArea.style.display = 'none';
+                imagePreview.classList.add('active');
+            } else {
+                fileUploadArea.style.display = 'block';
+                imagePreview.classList.remove('active');
+            }
+        }
+
+        window.setTab = (mode) => {
+            currentMode = mode;
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+
+            if (mode === 'photo') {
+                document.getElementById('photo-mode').classList.remove('hidden');
+                document.getElementById('manual-mode').classList.add('hidden');
+            } else {
+                document.getElementById('photo-mode').classList.add('hidden');
+                document.getElementById('manual-mode').classList.remove('hidden');
+            }
+        }
+
+        // Handle image selection
+        function handleImageSelect(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            // Check if the file is an image
+            if (!file.type.startsWith('image/')) {
+                alert('Please select a valid image file (JPEG, PNG, etc.)');
+                return;
+            }
+
+            const reader = new FileReader();
+            
+            reader.onload = (e) => {
+                base64Image = e.target.result;
+                updateUI();
+            };
+            
+            reader.onerror = () => {
+                console.error('Error reading file');
+                alert('Error reading the selected file. Please try again.');
+            };
+            
+            reader.readAsDataURL(file);
+        }
+
+        // Change image handler
+        window.changeImage = () => {
+            base64Image = null;
+            fileInput.value = '';
+            resultContainer.innerHTML = '';
+            updateUI();
+        }
+
+        const loadingStages = [
+            { status: "Processing image...", substatus: "Preparing medication photo for analysis", progress: 15 },
+            { status: "Identifying medication...", substatus: "Analyzing pill characteristics and imprints", progress: 35 },
+            { status: "Retrieving drug information...", substatus: "Accessing medication database", progress: 55 },
+            { status: "Analyzing side effects...", substatus: "Compiling safety information", progress: 75 },
+            { status: "Finalizing results...", substatus: "Preparing comprehensive medication report", progress: 95 }
+        ];
+
+        function updateLoadingStage(stageIndex) {
+            if (stageIndex >= loadingStages.length) return;
+
+            const stage = loadingStages[stageIndex];
+            document.getElementById('loading-status').textContent = stage.status;
+            document.getElementById('loading-substatus').textContent = stage.substatus;
+            document.getElementById('loading-progress-bar').style.width = stage.progress + '%';
+        }
+
+        window.identifyPill = async () => {
+            const btn = document.getElementById('submitBtn');
+            const loading = document.getElementById('loading');
+            const resultContainer = document.getElementById('result-container');
+
+            if (currentMode === 'photo' && !base64Image) {
+                alert("Please upload a photo first.");
+                return;
+            }
+
+            const payload = {
+                imageBase64: currentMode === 'photo' ? base64Image : null,
+                imprint: document.getElementById('imprint').value,
+                color: document.getElementById('color').value,
+                shape: document.getElementById('shape').value
+            };
+
+            btn.disabled = true;
+            loading.style.display = 'block';
+            resultContainer.innerHTML = '';
+
+            // Animate through loading stages
+            let currentStage = 0;
+            updateLoadingStage(0);
+
+            const stageInterval = setInterval(() => {
+                currentStage++;
+                if (currentStage < loadingStages.length) {
+                    updateLoadingStage(currentStage);
+                }
+            }, 1200);
+
+            try {
+                const response = await identifyFunction(payload);
+                const result = response.data;
+
+                clearInterval(stageInterval);
+                document.getElementById('loading-progress-bar').style.width = '100%';
+                document.getElementById('loading-status').textContent = 'Analysis complete!';
+                document.getElementById('loading-substatus').textContent = 'Displaying results...';
+
+                setTimeout(() => {
+                    if (result.success) {
+                        const htmlOutput = `
+                        <h2>Medication Details</h2>
+                        <p><strong>Medication Name:</strong> ${result.data.medicationName}</p>
+                        <p><strong>Primary Use:</strong> ${result.data.primaryUse}</p>
+                        <p><strong>Active Ingredients:</strong> ${result.data.activeIngredients}</p>
+                        <p><strong>Age Group:</strong> ${result.data.ageGroup}</p>
+                        <p><strong>Treatable Symptoms:</strong> ${result.data.treatableSymptoms}</p>
+                        <p><strong>Contraindicated Groups:</strong> ${result.data.contraindicatedGroups}</p>
+                        <p><strong>Dosage Duration:</strong> ${result.data.dosageDuration}</p>
+                        <p><strong>Approximate Cost (KSH):</strong> ${result.data.approximateCostKSH}</p>
+                        <p><strong>Common Side Effects:</strong> ${result.data.commonSideEffects}</p>
+                        <p><strong>Severe Reactions:</strong> ${result.data.severeReactions}</p>
+                        <p><strong>Do Not Mix With:</strong> ${result.data.doNotMixWith}</p>
+                        <p><strong>Medication Interactions:</strong> ${result.data.medicationInteractions}</p>
+                        <p><strong>Alternative Medications:</strong> ${result.data.alternativeMedications}</p>
+                        <p><strong>Disclaimer:</strong> ${result.data.disclaimer}</p>
+                        <p><strong>Counterfeit Warning:</strong> ${result.data.counterfeitWarning}</p>
+                    `;
+                        resultContainer.innerHTML = htmlOutput;
+                        loading.style.display = 'none';
+                    }
+                }, 800);
+            } catch (error) {
+                clearInterval(stageInterval);
+                console.error(error);
+                resultContainer.innerHTML = `
+                <div class="error-message">
+                    <p>Error identifying medication. Please try again.</p>
+                    <p style="font-size: 0.9em; margin-top: 10px; color: #7f0000;">${error.message || 'Unknown error occurred'}</p>
+                </div>`;
+                loading.style.display = 'none';
+            } finally {
+                btn.disabled = false;
+            }
+        }
+    </script>
+</body>
+
+</html>
