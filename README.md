@@ -39,6 +39,14 @@ Pharmalens Kenya is an innovative AI-powered medication identification platform 
 </div>
 Pharmalens Kenya is an AI-powered medication identification platform that helps users identify medications using images or manual input. This application leverages Google's Vertex AI to provide accurate medication information, including usage, side effects, and precautions.
 
+## 📋 Project Documentation
+
+### Project Proposal
+[View the detailed project proposal](proposal.md) to learn about the vision, goals, and implementation details of Pharmalens Kenya.
+
+### Presentation
+[View the PowerPoint presentation](./assets/Pharmalens.pptx) for an overview of the project, including features, architecture, and demonstration.
+
 ## 🚀 Live Demo
 [Access the Live Application](https://pharmalensmedix.web.app/)
 
@@ -274,18 +282,32 @@ Before you begin, ensure you have the following installed:
 ```
 med-id-app/
 ├── public/                 # Static files
-│   └── assets/             # Images and icons
+│   ├── assets/             # Images and icons
+│   ├── js/                 # JavaScript files
+│   │   ├── config.js       # Configuration settings
+│   │   └── firebase-config.js  # Firebase configuration
+│   └── index.html          # Main HTML file
 ├── src/                    # Source files
-│   ├── components/         # Reusable components
-│   ├── pages/              # Page components
-│   ├── services/           # API services
-│   └── utils/              # Utility functions
+│   ├── config.js           # Application configuration
+│   └── config.example.js   # Example configuration
+├── assets/                 # Project assets
+│   └── manual_upload_ui.PNG  # Screenshot of manual upload UI
+│   └── photo_upload_ui.PNG   # Screenshot of photo upload UI
+│   └── projectvideo.mp4    # Demo video
+│   └── main_ui.PNG         # Main UI screenshot
 ├── functions/              # Cloud Functions
 │   ├── src/                # TypeScript source
-│   └── lib/                # Shared libraries
+│   ├── lib/                # Compiled JavaScript
+│   └── package.json        # Dependencies
 ├── .env.example           # Example environment variables
-├── vite.config.js          # Vite configuration
-└── firebase.json          # Firebase configuration
+├── .gitignore             # Git ignore rules
+├── firebase.json          # Firebase configuration
+├── firestore.rules        # Firestore security rules
+├── package.json           # Project dependencies
+├── package-lock.json      # Dependency lock file
+├── README.md              # This file
+├── vite.config.js         # Vite configuration
+└── firestore-debug.log    # Debug log for Firestore
 ```
 
 ## 🧪 Testing
@@ -405,6 +427,5 @@ If you find this project useful, please consider giving it a ⭐️ on [GitHub](
 ---
 
 <div align="center">
-  <p>Made with ❤️ by the Pharmalens Team</p>
   <p>© 2025 Pharmalens Kenya. All rights reserved.</p>
 </div>
