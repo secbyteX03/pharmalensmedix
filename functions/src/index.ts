@@ -1,51 +1,59 @@
 import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
-import { VertexAI } from '@google-cloud/vertexai';
-import * as z from 'zod';
+import { VertexAI, HarmCategory, HarmBlockThreshold } from '@google-cloud/vertexai';
+// Genkit will be used for workflow orchestration
+// Note: Genkit is currently in preview, so we'll use direct Vertex AI client for now
+// import { genkit, configureGenkit } from '@genkit-ai/core';
+// import { firebase } from '@genkit-ai/firebase';
 
-// Initialize Firebase Admin
-admin.initializeApp();
+// Type definitions for Vertex AI
+interface Part {
+  text?: string;
+  inlineData?: {
+    mimeType: string;
+    data: string;
+  };
+}
 
-// Initialize Vertex AI with your project and location
-const vertexAiOptions = {
-  project: process.env.GCLOUD_PROJECT,
-  location: 'us-central1',
-};
+interface Content {
+  role: string;
+  parts: Part[];
+}
 
-const vertexAi = new VertexAI(vertexAiOptions);
+interface GenerationConfig {
+  maxOutputTokens?: number;
+  temperature?: number;
+  topP?: number;
+  topK?: number;
+}
 
-// Initialize the model (using Gemini 1.5 Pro)
-const generativeModel = vertexAi.preview.getGenerativeModel({
-  model: 'gemini-1.5-pro-001',
-  generationConfig: {
-    maxOutputTokens: 2048,
-    temperature: 0.7,
-    topP: 0.8,
-    topK: 40,
-  },
-});
+interface SafetySetting {
+  category: string;
+  threshold: string;
+}
 
-// Define the Zod schema for the expected AI response structure.
-// This ensures type safety and helps validate the AI's output.
-const MedicationResultSchema = z.object({
-  medicationName: z.string(),
-  primaryUse: z.string(),
-  activeIngredients: z.string(),
-  ageGroup: z.string(),
-  treatableSymptoms: z.string(),
-  contraindicatedGroups: z.string(),
-  dosageDuration: z.string(),
-  approximateCostKSH: z.string(),
-  commonSideEffects: z.string(),
-  severeReactions: z.string(),
-  doNotMixWith: z.string(),
-  medicationInteractions: z.string(),
-  alternativeMedications: z.string(),
-  disclaimer: z.string(),
-  counterfeitWarning: z.string()
-});
+interface GenerateContentRequest {
+  contents: Content[];
+  generationConfig?: GenerationConfig;
+  safetySettings?: SafetySetting[];
+}
 
-// Define the interface for the incoming request data to the Cloud Function.
+interface GenerateContentResponse {
+  response?: {
+    candidates?: Array<{
+      content?: {
+        parts?: Array<{
+          text?: string;
+        }>;
+      };
+    }>;
+  };
+  error?: {
+    message: string;
+  };
+}
+
+// Type definitions for the request data
 interface MedicationRequest {
   imageBase64?: string;
   imprint?: string;
@@ -53,139 +61,254 @@ interface MedicationRequest {
   shape?: string;
 }
 
-/**
- * Callable Cloud Function to identify medication based on provided details
- * (image, imprint, color, shape) using Google's Vertex AI.
- */
-export const identifyMedication = functions.https.onCall(async (request) => {
-  const data: MedicationRequest = request.data;
-  
-  try {
-    const { imageBase64, imprint, color, shape } = data;
+// Initialize Firebase Admin
+admin.initializeApp();
 
-    // Validate input
-    if (!imageBase64 && !imprint && !color && !shape) {
-      throw new functions.https.HttpsError(
-        'invalid-argument',
-        'Please provide either an image or medication details.'
-      );
-    }
+// Genkit initialization will be added when the package is stable
+// For now, we'll use direct Vertex AI client
+// const genkitConfig = {
+//   plugins: [
+//     firebase({
+//       projectId: process.env.GCLOUD_PROJECT,
+//       location: process.env.FUNCTIONS_LOCATION || 'us-central1',
+//     }),
+//   ],
+// };
+// configureGenkit(genkitConfig);
 
-    // Construct the prompt for the AI model
-    const prompt = `
-      Act as an expert pharmacist. Identify the medication based on the following details:
-      ${imprint ? `- Imprint: ${imprint}\n` : ''}
-      ${color ? `- Color: ${color}\n` : ''}
-      ${shape ? `- Shape: ${shape}\n` : ''}
-      
-      Provide the following information in valid JSON format:
-      {
-        "medicationName": "The name of the medication",
-        "primaryUse": "What is this medication used for?",
-        "activeIngredients": "List the active ingredients",
-        "ageGroup": "Who is this medication for?",
-        "treatableSymptoms": "What symptoms does it treat?",
-        "contraindicatedGroups": "Who should not take this medication?",
-        "dosageDuration": "What is the recommended dosage and duration?",
-        "approximateCostKSH": "Estimated cost in Kenyan Shillings",
-        "commonSideEffects": "List common side effects",
-        "severeReactions": "List any severe reactions",
-        "doNotMixWith": "What should not be taken with this medication?",
-        "medicationInteractions": "Any known drug interactions",
-        "alternativeMedications": "List alternative medications",
-        "disclaimer": "Important safety information",
-        "counterfeitWarning": "How to spot counterfeit versions"
-      }
-      
-      If the medication cannot be identified, set "medicationName" to "Unknown" and explain in the "disclaimer".
-      Ensure the response is valid JSON that can be parsed with JSON.parse().
-    `;
+// Simple response interface for TypeScript type safety
+interface MedicationData {
+  medicationName: string;
+  primaryUse: string;
+  activeIngredients: string;
+  ageGroup?: string;
+  treatableSymptoms?: string;
+  contraindicatedGroups?: string;
+  dosageDuration?: string;
+  approximateCostKSH?: string;
+  commonSideEffects?: string;
+  severeReactions?: string;
+  doNotMixWith?: string;
+  medicationInteractions?: string;
+  alternativeMedications?: string;
+  disclaimer: string;
+  counterfeitWarning?: string;
+  [key: string]: string | undefined;
+}
 
-    // Prepare the request for Vertex AI
-    const request = {
-      contents: [{
-        role: 'user',
-        parts: [{
-          text: prompt
-        }]
-      }]
-    };
+interface MedicationResponse {
+  success: boolean;
+  data: MedicationData;
+  error?: string;
+}
 
-    // Add image data if provided
-    if (imageBase64) {
-      const imageData = imageBase64.split(',')[1] || imageBase64;
-      const imagePart = {
-        inlineData: {
-          mimeType: 'image/jpeg',
-          data: imageData
-        }
-      };
-      // @ts-ignore - The type definition might be missing inlineData
-      request.contents[0].parts.push(imagePart);
-    }
-
-    console.log('Sending request to Vertex AI...');
-    
-    // Generate content using Vertex AI
-    const result = await generativeModel.generateContent(request);
-    const response = result.response;
-    
-    if (!response || !response.candidates || response.candidates.length === 0) {
-      throw new functions.https.HttpsError(
-        'internal',
-        'No response received from the AI service.'
-      );
-    }
-
-    // Extract the text response safely
-    const responseText = response.candidates?.[0]?.content?.parts?.[0]?.text;
-    
-    if (!responseText) {
-      throw new functions.https.HttpsError(
-        'internal',
-        'No valid response received from the AI service.'
-      );
-    }
-    
-    // Try to parse the JSON response
-    try {
-      const resultData = typeof responseText === 'string' 
-        ? JSON.parse(responseText) 
-        : responseText;
-      
-      // Validate the response against our schema
-      const validatedData = MedicationResultSchema.parse(resultData);
-      
-      return { 
-        success: true, 
-        data: validatedData 
-      };
-      
-    } catch (parseError) {
-      console.error('Error parsing AI response:', parseError);
-      throw new functions.https.HttpsError(
-        'internal',
-        'The AI response could not be properly formatted. Please try again.'
-      );
-    }
-
-  } catch (error: any) {
-    console.error('Error in identifyMedication:', error);
-    
-    // Handle different types of errors
-    if (error.code === 'functions/aborted') {
-      throw new functions.https.HttpsError('deadline-exceeded', 'Request timed out');
-    } else if (error.code === 'functions/resource-exhausted') {
-      throw new functions.https.HttpsError('resource-exhausted', 'Too many requests. Please try again later.');
-    } else if (error.code === 'permission-denied') {
-      throw new functions.https.HttpsError('permission-denied', 'Permission denied. Please check your Google Cloud permissions.');
-    }
-    
-    // Default error
-    throw new functions.https.HttpsError(
-      'internal',
-      error.message || 'An unexpected error occurred while identifying the medication.'
-    );
-  }
+// Initialize Vertex AI with enhanced configuration
+const vertexAi = new VertexAI({
+  project: process.env.GCLOUD_PROJECT || 'pharmalensmedix',
+  location: process.env.VERTEX_AI_LOCATION || 'us-central1',
+  apiEndpoint: 'us-central1-aiplatform.googleapis.com',
 });
 
+// Model configuration
+const modelConfig = {
+  model: 'gemini-1.5-pro-001',
+  generationConfig: {
+    maxOutputTokens: 2048,
+    temperature: 0.7,
+  },
+  safetySettings: [
+    {
+      category: HarmCategory.HARM_CATEGORY_HATE_SPEECH,
+      threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
+    },
+    {
+      category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT,
+      threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
+    },
+  ],
+});
+
+console.log('Vertex AI model initialized successfully');
+
+/**
+ * Simplified medication identification function
+ */
+
+
+// Initialize the Vertex AI model with proper TypeScript types
+const model = vertexAi.preview.getGenerativeModel({
+  model: 'gemini-pro-vision',
+  generationConfig: {
+    maxOutputTokens: 2048,
+    temperature: 0.4,
+    topP: 1,
+    topK: 32,
+  },
+  safetySettings: [
+    {
+      category: HarmCategory.HARM_CATEGORY_HARASSMENT,
+      threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
+    },
+    {
+      category: HarmCategory.HARM_CATEGORY_HATE_SPEECH,
+      threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
+    },
+    {
+      category: HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT,
+      threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
+    },
+    {
+      category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT,
+      threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
+    },
+  ],
+});
+// Cloud Function to identify medication using Vertex AI
+export const identifyMedication = functions.https.onCall(
+  async (requestData: unknown, context): Promise<MedicationResponse> => {
+    // Validate request data
+    if (!requestData || typeof requestData !== 'object') {
+      throw new functions.https.HttpsError(
+        'invalid-argument',
+        'Invalid request data'
+      );
+    }
+    
+    const data = requestData as MedicationRequest;
+
+    // Enhanced input validation
+    if (!data) {
+      throw new functions.https.HttpsError(
+        'invalid-argument',
+        'Request data is required'
+      );
+    }
+
+    // Check for required fields based on the request type
+    if (data.imageBase64) {
+      // Image-based identification
+      if (typeof data.imageBase64 !== 'string') {
+        throw new functions.https.HttpsError(
+          'invalid-argument',
+          'Image data must be a base64-encoded string'
+        );
+      }
+    } else {
+      // Manual search validation
+      if (!data.imprint && !data.color && !data.shape) {
+        throw new functions.https.HttpsError(
+          'invalid-argument',
+          'At least one search parameter (imprint, color, or shape) is required for manual search'
+        );
+      }
+    }
+
+    try {
+      const { imageBase64, imprint, color, shape } = data;
+
+      // Validate at least one input is provided
+      if (!imageBase64 && !imprint && !color && !shape) {
+        return {
+          success: false,
+          data: {
+            medicationName: 'Unknown',
+            primaryUse: 'N/A',
+            activeIngredients: 'N/A',
+            disclaimer: 'Please provide either an image or medication details.'
+          },
+          error: 'No input provided'
+        };
+      }
+
+      try {
+        let result: MedicationData;
+        
+        if (data.imageBase64) {
+          // Process image using Vertex AI
+          const prompt = `Identify this medication based on the image. Provide details including:
+          - Medication name and strength
+          - Primary use
+          - Active ingredients
+          - Common side effects
+          - Any warnings or precautions
+          
+          Format the response as a JSON object with these fields:
+          {
+            "medicationName": "...",
+            "primaryUse": "...",
+            "activeIngredients": "...",
+            "ageGroup": "...",
+            "treatableSymptoms": "...",
+            "contraindicatedGroups": "...",
+            "dosageDuration": "...",
+
+        const request: GenerateContentRequest = {
+          contents: [
+            {
+              role: 'user',
+              parts: [
+                { text: prompt },
+                ...(requestData.imageBase64 ? [{
+                  inlineData: {
+                    mimeType: 'image/jpeg',
+                    data: requestData.imageBase64
+                  }
+                } as Part] : [])
+              ]
+            }
+          ]
+        };
+
+        const response = await model.generateContent(request);
+        
+        // Parse the response safely
+        const responseText = response.response?.candidates?.[0]?.content?.parts?.[0]?.text || '';
+        try {
+          result = JSON.parse(responseText);
+        } catch (error) {
+          // Return a default response if parsing fails
+          return {
+            success: false,
+            data: {
+              medicationName: 'Unknown Medication',
+              primaryUse: 'Could not identify medication',
+              activeIngredients: 'Unknown',
+              disclaimer: 'This is an automated identification and should be verified by a healthcare professional.',
+              error: 'Failed to process medication information'
+            }
+          };
+        }
+
+        return {
+          success: true,
+          data: result,
+        };
+      } catch (error) {
+        console.error('Error identifying medication:', error);
+        return {
+          success: false,
+          data: {
+            medicationName: 'Error',
+            primaryUse: 'Could not identify medication',
+            activeIngredients: '',
+            error: error instanceof Error ? error.message : 'Unknown error occurred'
+          },
+        };
+      }
+    } catch (error) {
+      console.error('Error in identifyMedication:', error);
+
+      // Return a user-friendly error response
+      return {
+        success: false,
+        data: {
+          medicationName: 'Error',
+          primaryUse: 'Unable to process request',
+          activeIngredients: 'N/A',
+          disclaimer: 'An error occurred while processing your request. Please try again.'
+        },
+        error: error instanceof Error ? error.message : 'Unknown error'
+      };
+    }
+  }
+);
