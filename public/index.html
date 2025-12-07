@@ -18,7 +18,6 @@
             --primary-dark: #00695c;
             --primary-light: #4db6ac;
             --accent: #26a69a;
-            --bg-gradient: linear-gradient(135deg, #dadbe2 0%, #e2dde7 100%);
             --text-dark: #2c3e50;
             --text-light: #7f8c8d;
             --shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
@@ -39,7 +38,6 @@
             background: white;
             width: 100%;
             max-width: 900px;
-            padding: 0;
             border-radius: 24px;
             box-shadow: var(--shadow);
             overflow: hidden;
@@ -58,7 +56,7 @@
             }
         }
 
-        /* Header with Logo */
+        /* Header */
         .header {
             background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
             padding: 30px;
@@ -100,6 +98,8 @@
             width: 80px;
             height: 80px;
             object-fit: contain;
+            margin: 0 auto;
+            display: block;
             filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
         }
 
@@ -110,10 +110,6 @@
             margin-bottom: 5px;
             position: relative;
             z-index: 1;
-        }
-
-        .header h1 i {
-            margin-right: 10px;
         }
 
         .header p {
@@ -137,7 +133,7 @@
             border-radius: 12px;
         }
 
-        .tab {
+        .tab-button {
             flex: 1;
             padding: 12px;
             text-align: center;
@@ -147,21 +143,27 @@
             border-radius: 8px;
             transition: all 0.3s ease;
             font-size: 0.95rem;
+            border: none;
+            background: transparent;
         }
 
-        .tab i {
-            margin-right: 8px;
-        }
-
-        .tab:hover {
+        .tab-button:hover {
             background: rgba(0, 137, 123, 0.1);
             color: var(--primary);
         }
 
-        .tab.active {
+        .tab-button.active {
             background: var(--primary);
             color: white;
             box-shadow: 0 4px 12px rgba(0, 137, 123, 0.3);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
         }
 
         /* Inputs */
@@ -205,13 +207,19 @@
             background: linear-gradient(135deg, #e0f2f1 0%, #b2dfdb 100%);
             transition: all 0.3s ease;
             position: relative;
-            overflow: hidden;
         }
 
         .file-upload:hover {
             border-color: var(--primary);
             background: linear-gradient(135deg, #b2dfdb 0%, #80cbc4 100%);
             transform: translateY(-2px);
+        }
+
+        .file-upload i {
+            font-size: 2.5rem;
+            color: var(--primary-dark);
+            margin-bottom: 10px;
+            display: block;
         }
 
         .file-upload p {
@@ -221,27 +229,12 @@
             margin: 0;
         }
 
-        .file-upload::before {
-            content: '\f030';
-            font-family: 'Font Awesome 6 Free';
-            font-weight: 900;
-            display: block;
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-            color: var(--primary-dark);
-        }
-
         .image-preview-container {
-            display: none;
             text-align: center;
             animation: fadeIn 0.5s ease-out;
         }
 
-        .image-preview-container.active {
-            display: block;
-        }
-
-        #preview-img {
+        .image-preview-container img {
             max-width: 100%;
             max-height: 300px;
             border-radius: 12px;
@@ -262,10 +255,6 @@
             font-size: 0.9rem;
         }
 
-        .change-image-btn i {
-            margin-right: 8px;
-        }
-
         .change-image-btn:hover {
             background: var(--primary);
             color: white;
@@ -284,20 +273,16 @@
             font-size: 1.1rem;
             font-weight: 700;
             cursor: pointer;
-            margin-top: 10px;
+            margin-top: 20px;
             transition: all 0.3s ease;
             box-shadow: 0 4px 15px rgba(0, 137, 123, 0.3);
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
 
-        .btn-identify:hover {
+        .btn-identify:hover:not(:disabled) {
             transform: translateY(-2px);
             box-shadow: var(--shadow-hover);
-        }
-
-        .btn-identify:active {
-            transform: translateY(0);
         }
 
         .btn-identify:disabled {
@@ -306,7 +291,7 @@
             transform: none;
         }
 
-        /* Loading */
+        /* Loading Animation */
         #loading {
             text-align: center;
             display: none;
@@ -339,6 +324,7 @@
             position: relative;
             animation: pillScan 2s ease-in-out infinite;
             box-shadow: 0 4px 15px rgba(0, 137, 123, 0.4);
+            transition: all 0.5s ease;
         }
 
         .pill::before {
@@ -349,6 +335,70 @@
             background: white;
             left: 50%;
             transform: translateX(-50%);
+            transition: all 0.5s ease;
+        }
+
+        /* Pill Breaking Animation */
+        .pill.breaking {
+            animation: none;
+        }
+
+        .pill.breaking::before {
+            width: 4px;
+            background: #ffa500;
+            box-shadow: 0 0 10px #ffa500;
+        }
+
+        .pill-left,
+        .pill-right {
+            position: absolute;
+            width: 30px;
+            height: 25px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            border-radius: 25px;
+            opacity: 0;
+            box-shadow: 0 4px 15px rgba(0, 137, 123, 0.4);
+        }
+
+        .pill-left {
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+            left: 50%;
+            transform: translateX(-100%);
+        }
+
+        .pill-right {
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+            right: 50%;
+            transform: translateX(100%);
+        }
+
+        .pill.broken .pill-left,
+        .pill.broken .pill-right {
+            opacity: 1;
+        }
+
+        .pill.broken .pill-left {
+            animation: slideLeft 0.8s ease-out forwards;
+        }
+
+        .pill.broken .pill-right {
+            animation: slideRight 0.8s ease-out forwards;
+        }
+
+        @keyframes slideLeft {
+            to {
+                transform: translateX(-150%) rotate(-15deg);
+                opacity: 0;
+            }
+        }
+
+        @keyframes slideRight {
+            to {
+                transform: translateX(150%) rotate(15deg);
+                opacity: 0;
+            }
         }
 
         .scan-line {
@@ -447,7 +497,6 @@
             font-size: 1rem;
             margin-top: 10px;
             min-height: 24px;
-            transition: all 0.3s ease;
         }
 
         .loading-progress {
@@ -494,7 +543,7 @@
         #result-container p {
             margin: 12px 0;
             line-height: 1.7;
-            padding: 10px;
+            padding: 12px 15px;
             background: white;
             border-radius: 8px;
             border-left: 4px solid var(--primary-light);
@@ -504,11 +553,11 @@
             color: var(--primary-dark);
             font-weight: 700;
             display: inline-block;
-            min-width: 180px;
+            min-width: 200px;
         }
 
         .hidden {
-            display: none;
+            display: none !important;
         }
 
         @keyframes fadeIn {
@@ -523,19 +572,20 @@
             }
         }
 
-        /* Error styling */
         .error-message {
             color: #c62828;
             background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%);
             padding: 20px;
             border-radius: 12px;
-            margin-top: 20px;
             border-left: 5px solid #c62828;
         }
 
         .error-message p {
-            margin: 0;
+            margin: 5px 0;
             line-height: 1.6;
+            background: transparent !important;
+            border: none !important;
+            padding: 0 !important;
         }
 
         .error-message p:first-child {
@@ -557,6 +607,12 @@
             .content {
                 padding: 20px;
             }
+
+            #result-container strong {
+                min-width: auto;
+                display: block;
+                margin-bottom: 5px;
+            }
         }
     </style>
 </head>
@@ -565,7 +621,10 @@
     <div class="app-container">
         <div class="header">
             <div class="logo-container">
-                <img src="/assets/logo.png" alt="Pharmalens Logo" class="logo">
+                <div class="logo-container-inner" data-logo-fallback>
+                    <img src="assets/logo.png" alt="Pharmalens Logo" class="logo"
+                        onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-pills\' style=\'font-size: 60px; color: #ffa500;\'></i>';">
+                </div>
             </div>
             <h1><i class="fas fa-pills"></i> Pharmalens Kenya</h1>
             <p>Smart Pill Identifier powered by AI</p>
@@ -573,65 +632,83 @@
 
         <div class="content">
             <div class="tabs">
-                <div class="tab active" onclick="setTab('photo')"><i class="fas fa-camera"></i> Scan Photo</div>
-                <div class="tab" onclick="setTab('manual')"><i class="fas fa-pen-to-square"></i> Manual Search</div>
+                <button class="tab-button active" data-tab="upload-tab">
+                    <i class="fas fa-camera"></i> Take Photo
+                </button>
+                <button class="tab-button" data-tab="manual-tab">
+                    <i class="fas fa-keyboard"></i> Manual Entry
+                </button>
             </div>
 
-            <!-- PHOTO MODE -->
-            <div id="photo-mode">
-                <div class="input-group">
-                    <div class="file-upload" id="file-upload-area">
-                        <p>Tap to Take Photo or Upload</p>
-                        <input type="file" id="fileInput" accept="image/*" style="display: none;">
-                    </div>
-                    <div class="image-preview-container" id="image-preview">
-                        <img id="preview-img" alt="Uploaded medication image">
-                        <div>
-                            <button class="change-image-btn" onclick="changeImage()"><i class="fas fa-camera"></i>
-                                Analyze Another
-                                Medication</button>
-                        </div>
+            <!-- Photo Upload Tab -->
+            <div id="upload-tab" class="tab-content active">
+                <div id="file-upload-area" class="file-upload">
+                    <i class="fas fa-camera"></i>
+                    <p>Click to upload pill photo</p>
+                </div>
+                <input type="file" id="fileInput" accept="image/*" style="display: none;">
+
+                <div id="image-preview" class="image-preview-container hidden">
+                    <img id="preview-img" alt="Pill preview">
+                    <div>
+                        <button class="change-image-btn" id="change-image-btn">
+                            <i class="fas fa-sync-alt"></i> Change Image
+                        </button>
                     </div>
                 </div>
             </div>
 
-            <!-- MANUAL MODE -->
-            <div id="manual-mode" class="hidden">
+            <!-- Manual Entry Tab -->
+            <div id="manual-tab" class="tab-content">
                 <div class="input-group">
-                    <label>Pill Imprint (Text on pill)</label>
-                    <input type="text" id="imprint" placeholder="e.g., 'Ibu 400' or 'G 32'">
+                    <label for="imprint">Imprint/Text on Pill:</label>
+                    <input type="text" id="imprint" placeholder="e.g., L544, TYLENOL">
                 </div>
+
                 <div class="input-group">
-                    <label>Color</label>
+                    <label for="color">Color:</label>
                     <select id="color">
                         <option value="">Select Color</option>
-                        <option value="White">White</option>
-                        <option value="Blue">Blue</option>
-                        <option value="Red">Red</option>
-                        <option value="Yellow">Yellow</option>
-                        <option value="Green">Green</option>
-                        <option value="Orange">Orange</option>
+                        <option value="white">White</option>
+                        <option value="yellow">Yellow</option>
+                        <option value="blue">Blue</option>
+                        <option value="red">Red</option>
+                        <option value="green">Green</option>
+                        <option value="orange">Orange</option>
+                        <option value="pink">Pink</option>
+                        <option value="brown">Brown</option>
+                        <option value="purple">Purple</option>
+                        <option value="gray">Gray</option>
                     </select>
                 </div>
+
                 <div class="input-group">
-                    <label>Shape</label>
+                    <label for="shape">Shape:</label>
                     <select id="shape">
                         <option value="">Select Shape</option>
-                        <option value="Round">Round</option>
-                        <option value="Oblong/Capsule">Oblong/Capsule</option>
-                        <option value="Oval">Oval</option>
-                        <option value="Square">Square</option>
-                        <option value="Diamond">Diamond</option>
+                        <option value="round">Round</option>
+                        <option value="oval">Oval</option>
+                        <option value="capsule">Capsule</option>
+                        <option value="square">Square</option>
+                        <option value="rectangle">Rectangle</option>
+                        <option value="diamond">Diamond</option>
+                        <option value="pentagon">Pentagon</option>
+                        <option value="hexagon">Hexagon</option>
                     </select>
                 </div>
             </div>
 
-            <button class="btn-identify" id="submitBtn" onclick="identifyPill()">Identify Medication</button>
+            <button class="btn-identify" id="submitBtn">
+                <i class="fas fa-search"></i> Identify Medication
+            </button>
 
             <div id="loading">
                 <div class="loading-animation">
                     <div class="pill-container">
-                        <div class="pill"></div>
+                        <div class="pill" id="pill">
+                            <div class="pill-left"></div>
+                            <div class="pill-right"></div>
+                        </div>
                         <div class="scan-line"></div>
                         <div class="scan-particles">
                             <div class="particle"></div>
@@ -641,8 +718,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="loading-status" id="loading-status">Initializing analysis...</div>
-                <div class="loading-substatus" id="loading-substatus"></div>
+                <div class="loading-status" id="loading-status">Processing image...</div>
+                <div class="loading-substatus" id="loading-substatus">Preparing medication photo for analysis</div>
                 <div class="loading-progress">
                     <div class="loading-progress-bar" id="loading-progress-bar" style="width: 0%"></div>
                 </div>
@@ -652,104 +729,131 @@
         </div>
     </div>
 
-    <!-- Firebase SDKs -->
     <script type="module">
-        import { app, analytics, functions } from './js/firebase-config.js';
-        import { httpsCallable } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-functions.js";
-        
-        // Initialize Cloud Function
-        const identifyFunction = httpsCallable(functions, 'identifyMedication');
+        // State variables
+        let base64Image = null;
+        let currentTab = 'upload-tab';
+        let uploadCount = 0;
+        let manualSearchCount = 0;
 
         // DOM Elements
         const fileInput = document.getElementById('fileInput');
         const fileUploadArea = document.getElementById('file-upload-area');
-        const previewImg = document.getElementById('preview-img');
         const imagePreview = document.getElementById('image-preview');
-        const resultContainer = document.getElementById('result-container');
+        const previewImg = document.getElementById('preview-img');
+        const changeImageBtn = document.getElementById('change-image-btn');
+        const submitBtn = document.getElementById('submitBtn');
         const loading = document.getElementById('loading');
-        
-        // State
-        let currentMode = 'photo';
-        let base64Image = null;
+        const resultContainer = document.getElementById('result-container');
 
-        // Event Listeners
-        document.addEventListener('DOMContentLoaded', () => {
-            // File upload click handler
-            fileUploadArea.addEventListener('click', () => {
-                fileInput.click();
+        // Empty medications object - now using backend API for all medication data
+        const mockMedications = { upload: [], manual: {} };
+
+        // Function to get result from backend API
+        async function getMedicationResult(isUpload) {
+            try {
+                const requestData = {};
+                
+                if (isUpload && base64Image) {
+                    // For image upload
+                    requestData.imageBase64 = base64Image.split(',')[1]; // Remove the data URL prefix if present
+                } else if (!isUpload) {
+                    // For manual search
+                    requestData.imprint = document.getElementById('imprint')?.value.trim().toLowerCase() || '';
+                    requestData.color = document.getElementById('color')?.value.toLowerCase() || '';
+                    requestData.shape = document.getElementById('shape')?.value.toLowerCase() || '';
+                    
+                    // Check if at least one field is provided
+                    if (!requestData.imprint && !requestData.color && !requestData.shape) {
+                        throw new Error('Please provide at least one search criteria');
+                    }
+                } else {
+                    throw new Error('No image or search criteria provided');
+                }
+                
+                console.log('Sending request with data:', requestData);
+                
+                const response = await fetch('https://us-central1-pharmalensmedix.cloudfunctions.net/identifyMedication', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(requestData)
+                });
+                
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    console.error('API Error:', errorData);
+                    throw new Error(errorData.error || 'Failed to identify medication');
+                }
+                
+                return await response.json();
+            } catch (error) {
+                console.error('Error identifying medication:', error);
+                return {
+                    success: false,
+                    error: 'Failed to identify medication. Please check your connection and try again.'
+                };
+            }
+        }
+
+        // Tab switching
+        document.querySelectorAll('.tab-button').forEach(button => {
+            button.addEventListener('click', () => {
+                const tabId = button.dataset.tab;
+                if (!tabId) return;
+
+                // Update buttons
+                document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+
+                // Update tab content
+                document.querySelectorAll('.tab-content').forEach(content => {
+                    content.classList.remove('active');
+                });
+                
+                const targetTab = document.getElementById(tabId);
+                if (targetTab) {
+                    targetTab.classList.add('active');
+                }
+
+                // Update current tab
+                currentTab = tabId;
             });
-
-            // File input change handler
-            fileInput.addEventListener('change', handleImageSelect);
-
-            // Initialize UI
-            updateUI();
         });
 
-        // Update UI based on current state
-        function updateUI() {
-            // Hide loading by default
-            loading.style.display = 'none';
-            
-            // Initialize image preview
-            if (base64Image) {
-                previewImg.src = base64Image;
-                fileUploadArea.style.display = 'none';
-                imagePreview.classList.add('active');
-            } else {
-                fileUploadArea.style.display = 'block';
-                imagePreview.classList.remove('active');
-            }
-        }
+        // File upload handling
+        fileUploadArea.addEventListener('click', () => fileInput.click());
 
-        window.setTab = (mode) => {
-            currentMode = mode;
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            event.target.classList.add('active');
-
-            if (mode === 'photo') {
-                document.getElementById('photo-mode').classList.remove('hidden');
-                document.getElementById('manual-mode').classList.add('hidden');
-            } else {
-                document.getElementById('photo-mode').classList.add('hidden');
-                document.getElementById('manual-mode').classList.remove('hidden');
-            }
-        }
-
-        // Handle image selection
-        function handleImageSelect(e) {
+        fileInput.addEventListener('change', (e) => {
             const file = e.target.files[0];
             if (!file) return;
 
-            // Check if the file is an image
             if (!file.type.startsWith('image/')) {
-                alert('Please select a valid image file (JPEG, PNG, etc.)');
+                alert('Please select a valid image file');
                 return;
             }
 
             const reader = new FileReader();
-            
-            reader.onload = (e) => {
-                base64Image = e.target.result;
-                updateUI();
+            reader.onload = (event) => {
+                base64Image = event.target.result;
+                previewImg.src = base64Image;
+                fileUploadArea.classList.add('hidden');
+                imagePreview.classList.remove('hidden');
             };
-            
-            reader.onerror = () => {
-                console.error('Error reading file');
-                alert('Error reading the selected file. Please try again.');
-            };
-            
             reader.readAsDataURL(file);
-        }
+        });
 
-        // Change image handler
-        window.changeImage = () => {
+        // Change image
+        changeImageBtn.addEventListener('click', () => {
             base64Image = null;
             fileInput.value = '';
+            imagePreview.classList.add('hidden');
+            fileUploadArea.classList.remove('hidden');
             resultContainer.innerHTML = '';
-            updateUI();
-        }
+        });
 
+        // Loading stages
         const loadingStages = [
             { status: "Processing image...", substatus: "Preparing medication photo for analysis", progress: 15 },
             { status: "Identifying medication...", substatus: "Analyzing pill characteristics and imprints", progress: 35 },
@@ -760,91 +864,205 @@
 
         function updateLoadingStage(stageIndex) {
             if (stageIndex >= loadingStages.length) return;
-
             const stage = loadingStages[stageIndex];
             document.getElementById('loading-status').textContent = stage.status;
             document.getElementById('loading-substatus').textContent = stage.substatus;
             document.getElementById('loading-progress-bar').style.width = stage.progress + '%';
         }
 
-        window.identifyPill = async () => {
-            const btn = document.getElementById('submitBtn');
-            const loading = document.getElementById('loading');
+        // Pill breaking animation
+        function breakPill() {
+            const pill = document.getElementById('pill');
+            pill.classList.add('breaking');
+
+            setTimeout(() => {
+                pill.classList.add('broken');
+            }, 300);
+        }
+
+        function resetPill() {
+            const pill = document.getElementById('pill');
+            pill.classList.remove('breaking', 'broken');
+        }
+
+        // Display result function
+        function displayResult(result) {
             const resultContainer = document.getElementById('result-container');
-
-            if (currentMode === 'photo' && !base64Image) {
-                alert("Please upload a photo first.");
-                return;
-            }
-
-            const payload = {
-                imageBase64: currentMode === 'photo' ? base64Image : null,
-                imprint: document.getElementById('imprint').value,
-                color: document.getElementById('color').value,
-                shape: document.getElementById('shape').value
-            };
-
-            btn.disabled = true;
-            loading.style.display = 'block';
-            resultContainer.innerHTML = '';
-
-            // Animate through loading stages
-            let currentStage = 0;
-            updateLoadingStage(0);
-
-            const stageInterval = setInterval(() => {
-                currentStage++;
-                if (currentStage < loadingStages.length) {
-                    updateLoadingStage(currentStage);
-                }
-            }, 1200);
-
-            try {
-                const response = await identifyFunction(payload);
-                const result = response.data;
-
-                clearInterval(stageInterval);
-                document.getElementById('loading-progress-bar').style.width = '100%';
-                document.getElementById('loading-status').textContent = 'Analysis complete!';
-                document.getElementById('loading-substatus').textContent = 'Displaying results...';
-
-                setTimeout(() => {
-                    if (result.success) {
-                        const htmlOutput = `
-                        <h2>Medication Details</h2>
-                        <p><strong>Medication Name:</strong> ${result.data.medicationName}</p>
-                        <p><strong>Primary Use:</strong> ${result.data.primaryUse}</p>
-                        <p><strong>Active Ingredients:</strong> ${result.data.activeIngredients}</p>
-                        <p><strong>Age Group:</strong> ${result.data.ageGroup}</p>
-                        <p><strong>Treatable Symptoms:</strong> ${result.data.treatableSymptoms}</p>
-                        <p><strong>Contraindicated Groups:</strong> ${result.data.contraindicatedGroups}</p>
-                        <p><strong>Dosage Duration:</strong> ${result.data.dosageDuration}</p>
-                        <p><strong>Approximate Cost (KSH):</strong> ${result.data.approximateCostKSH}</p>
-                        <p><strong>Common Side Effects:</strong> ${result.data.commonSideEffects}</p>
-                        <p><strong>Severe Reactions:</strong> ${result.data.severeReactions}</p>
-                        <p><strong>Do Not Mix With:</strong> ${result.data.doNotMixWith}</p>
-                        <p><strong>Medication Interactions:</strong> ${result.data.medicationInteractions}</p>
-                        <p><strong>Alternative Medications:</strong> ${result.data.alternativeMedications}</p>
-                        <p><strong>Disclaimer:</strong> ${result.data.disclaimer}</p>
-                        <p><strong>Counterfeit Warning:</strong> ${result.data.counterfeitWarning}</p>
-                    `;
-                        resultContainer.innerHTML = htmlOutput;
-                        loading.style.display = 'none';
-                    }
-                }, 800);
-            } catch (error) {
-                clearInterval(stageInterval);
-                console.error(error);
+            
+            if (result.success && result.data) {
+                const data = result.data;
                 resultContainer.innerHTML = `
-                <div class="error-message">
-                    <p>Error identifying medication. Please try again.</p>
-                    <p style="font-size: 0.9em; margin-top: 10px; color: #7f0000;">${error.message || 'Unknown error occurred'}</p>
-                </div>`;
-                loading.style.display = 'none';
-            } finally {
-                btn.disabled = false;
+                    <div class="result-content">
+                        <h2><i class="fas fa-pills"></i> ${data.medicationName || 'Medication Details'}</h2>
+                        <div class="result-section">
+                            <h3><i class="fas fa-info-circle"></i> Basic Information</h3>
+                            <p><strong>Primary Use:</strong> ${data.primaryUse || 'N/A'}</p>
+                            <p><strong>Active Ingredients:</strong> ${data.activeIngredients || 'N/A'}</p>
+                            <p><strong>Age Group:</strong> ${data.ageGroup || 'N/A'}</p>
+                        </div>
+                        
+                        <div class="result-section">
+                            <h3><i class="fas fa-stethoscope"></i> Medical Information</h3>
+                            <p><strong>Treatable Symptoms:</strong> ${data.treatableSymptoms || 'N/A'}</p>
+                            <p><strong>Contraindicated Groups:</strong> ${data.contraindicatedGroups || 'N/A'}</p>
+                            <p><strong>Dosage Duration:</strong> ${data.dosageDuration || 'N/A'}</p>
+                        </div>
+                        
+                        <div class="result-section">
+                            <h3><i class="fas fa-exclamation-triangle"></i> Warnings & Side Effects</h3>
+                            <p><strong>Common Side Effects:</strong> ${data.commonSideEffects || 'N/A'}</p>
+                            <p><strong>Severe Reactions:</strong> ${data.severeReactions || 'N/A'}</p>
+                            <p><strong>Do Not Mix With:</strong> ${data.doNotMixWith || 'N/A'}</p>
+                            <p><strong>Medication Interactions:</strong> ${data.medicationInteractions || 'N/A'}</p>
+                        </div>
+                        
+                        <div class="result-section">
+                            <h3><i class="fas fa-info-circle"></i> Additional Information</h3>
+                            <p><strong>Approximate Cost (KSH):</strong> ${data.approximateCostKSH || 'N/A'}</p>
+                            <p><strong>Alternative Medications:</strong> ${data.alternativeMedications || 'N/A'}</p>
+                        </div>
+                        
+                        <div class="disclaimer-section">
+                            <p class="disclaimer">${data.disclaimer || 'Please consult a healthcare professional before taking any medication.'}</p>
+                            <p class="warning">${data.counterfeitWarning || 'Always purchase medications from licensed pharmacies.'}</p>
+                        </div>
+                    </div>
+                `;
+            } else {
+                resultContainer.innerHTML = `
+                    <div class="error-message">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <p>${result.error || 'Failed to identify medication. Please try again.'}</p>
+                    </div>
+                `;
+            }
+            
+            resultContainer.style.display = 'block';
+        }
+
+        // Validate form inputs
+        function validateForm() {
+            if (currentTab === 'upload-tab') {
+                return Boolean(base64Image);
+            }
+            
+            if (currentTab === 'manual-tab') {
+                const imprint = document.getElementById('imprint')?.value.trim() || '';
+                const color = document.getElementById('color')?.value || '';
+                const shape = document.getElementById('shape')?.value || '';
+                return Boolean(imprint || color || shape);
+            }
+            
+            return false;
+        }
+
+        // Update UI state
+        function setLoadingState(isLoading) {
+            const submitBtn = document.getElementById('submitBtn');
+            const resultContainer = document.getElementById('result-container');
+            const loading = document.getElementById('loading');
+            
+            if (loading) {
+                loading.style.display = isLoading ? 'block' : 'none';
+            }
+            
+            if (resultContainer) {
+                resultContainer.style.display = 'none';
+            }
+            
+            if (submitBtn) {
+                submitBtn.disabled = isLoading;
+                submitBtn.innerHTML = isLoading 
+                    ? '<i class="fas fa-spinner fa-spin"></i> Identifying...' 
+                    : '<i class="fas fa-search"></i> Identify Medication';
             }
         }
+
+        // Main identify function
+        async function identifyPill() {
+            const submitBtn = document.getElementById('submitBtn');
+            
+            try {
+                const isValid = validateForm();
+                if (!isValid) {
+                    alert(currentTab === 'upload-tab' 
+                        ? "Please upload a photo first." 
+                        : "Please fill in at least one field.");
+                    return;
+                }
+                
+                setLoadingState(true);
+
+                // Disable the submit button to prevent multiple clicks
+                if (submitBtn) {
+                    submitBtn.disabled = true;
+                    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Identifying...';
+                }
+                
+                // Hide result and show loading
+                if (resultContainer) resultContainer.style.display = 'none';
+                if (loading) loading.style.display = 'block';
+                
+                const loadingMessage = document.getElementById('loading-message');
+                const progressBar = document.getElementById('loading-progress-bar');
+                const loadingStatus = document.getElementById('loading-status');
+                
+                if (loadingMessage) loadingMessage.textContent = 'Analyzing medication...';
+                if (progressBar) progressBar.style.width = '0%';
+                if (loadingStatus) loadingStatus.textContent = 'Initializing analysis...';
+
+                // Simulate progress for better UX
+                let progress = 0;
+                const progressInterval = setInterval(() => {
+                    progress += Math.random() * 10;
+                    if (progress > 80) clearInterval(progressInterval);
+                    document.getElementById('loading-progress-bar').style.width = `${Math.min(progress, 80)}%`;
+                }, 300);
+
+                // Simulate analysis stages
+                const stages = [
+                    currentTab === 'upload-tab' ? 'Processing image...' : 'Processing request...',
+                    'Enhancing quality...',
+                    'Analyzing features...',
+                    'Matching with database...',
+                    'Verifying results...'
+                ];
+                
+                let currentStage = 0;
+                const stageInterval = setInterval(() => {
+                    if (currentStage < stages.length) {
+                        document.getElementById('loading-status').textContent = stages[currentStage];
+                        currentStage++;
+                    }
+                }, 1200);
+
+                // Call the backend API
+                const result = await getMedicationResult(currentTab === 'upload-tab');
+                
+                // Clear intervals and update UI
+                clearInterval(stageInterval);
+                clearInterval(progressInterval);
+                document.getElementById('loading-progress-bar').style.width = '100%';
+                document.getElementById('loading-status').textContent = 'Analysis complete!';
+                
+                // Display the result
+                displayResult(result);
+                
+            } catch (error) {
+                console.error('Error identifying pill:', error);
+                displayResult({ success: false, error: 'An error occurred while identifying the medication.' });
+            } finally {
+                if (loading) loading.style.display = 'none';
+                const submitBtn = document.getElementById('submitBtn');
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = '<i class="fas fa-search"></i> Identify Medication';
+                }
+            }
+        }
+
+        // Attach to button
+        submitBtn.addEventListener('click', identifyPill);
     </script>
 </body>
 
