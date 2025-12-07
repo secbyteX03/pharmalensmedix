@@ -305,6 +305,7 @@ med-id-app/
 ├── firestore.rules        # Firestore security rules
 ├── package.json           # Project dependencies
 ├── package-lock.json      # Dependency lock file
+├── proposal.md            # Project proposal document
 ├── README.md              # This file
 ├── vite.config.js         # Vite configuration
 └── firestore-debug.log    # Debug log for Firestore

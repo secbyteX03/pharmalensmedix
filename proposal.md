@@ -1,162 +1,123 @@
-# PharmaLensMediX: AI-Powered Medication Identification for Africa
+# PharmaLens: Web-Based Medication Identification
 
 ## Executive Summary
 
-PharmaLensMediX is an innovative AI-powered medication identification platform designed to address the critical challenge of medication safety in Kenya and across Africa. Our solution uses advanced computer vision and machine learning to instantly identify medications using just a smartphone camera or pill characteristics, helping to prevent medication errors and combat counterfeit drugs.
+PharmaLens is a web-based medication identification tool designed to help users identify medications using visual characteristics. This proof-of-concept application demonstrates the potential of AI in medication safety, providing instant access to medication information through a simple, user-friendly interface.
 
 ## The Challenge
 
-Medication safety is a critical issue in Africa, where:
+Medication identification remains a challenge in many healthcare settings:
 
-- **Recent PPB data** shows 432 adverse drug reactions in Kenya in just 3 months (Q3 2025)
-- 30% of medicines in circulation are counterfeit or substandard (WHO)
-- Medication errors cause 1 in 7 medical deaths in low-resource settings
-- Counterfeit medications cost the African economy over $200B annually
+- Medication errors are a leading cause of preventable harm in healthcare
+- Many patients lack access to reliable medication information
+- Existing solutions are often not accessible or user-friendly
+- There's a need for quick reference tools for both healthcare professionals and the general public
 
 ## Our Solution
 
-PharmaLensMediX is a cutting-edge medication identification platform that helps users identify medications using:
+PharmaLens is a web application that helps users identify medications through:
 
-1. **AI-Powered Visual Recognition**
-   - Instant pill identification using smartphone camera
-   - Works with low-quality images common in low-bandwidth areas
-   - Recognizes pills by shape, color, and imprint
+1. **Visual Identification**
+   - Web-based interface accessible from any device
+   - Simple upload functionality for pill images
+   - Clean, responsive design for all screen sizes
 
-2. **Smart Search Functionality**
+2. **Search Functionality**
    - Search by pill characteristics (imprint, color, shape)
-   - Multi-language support for local languages
-   - Offline database for areas with poor connectivity
+   - Intuitive form-based input
+   - Quick access to medication information
 
-3. **Comprehensive Drug Information**
-   - Detailed medication information and uses
-   - Potential side effects and interactions
-   - Proper dosage instructions
-   - Safety warnings and contraindications
+3. **Medication Information**
+   - Basic drug information display
+   - Key details about medication usage
+   - Important safety information
 
-4. **Counterfeit Detection & Adverse Reaction Reporting**
-   - Real-time verification of medication authenticity
-   - Batch number and expiration date validation
-   - Integrated reporting system for adverse drug reactions
-   - Direct linkage to Pharmacy and Poisons Board reporting systems
-   - Automated alerts for medication recalls and safety warnings
+## Technical Implementation
 
-## Market Opportunity
+### Core Technologies
 
-### Kenya-Specific
+- **Frontend**: HTML, CSS, JavaScript
+- **Backend**: Firebase Cloud Functions
+- **AI/ML**: Google Vertex AI integration
+- **Hosting**: Firebase Hosting
+- **Database**: Cloud Firestore
 
-- **Population**: 56+ million people
-- **Healthcare Market**: $3.1 billion (2023)
-- **Digital Health Growth**: 25% CAGR (2023-2028)
-- **Mobile Penetration**: 120% (multiple SIM cards per user)
-- **M-Pesa Integration**: 73% of Kenyans use mobile money
-- **Regulatory Support**: Strong backing from Pharmacy and Poisons Board for digital health solutions
-- **Recent Need**: 432 adverse drug reactions reported in Q3 2025 highlighting urgent need for better medication management
+### Key Features Implemented
 
-### Pan-African Potential
+1. **User Interface**
+   - Clean, responsive design
+   - Intuitive form for medication search
+   - Image upload functionality
+   - Clear display of results
 
-- **Population**: 1.4 billion people
-- **Healthcare Market**: $259 billion (projected 2030)
-- **Smartphone Penetration**: 50% and growing rapidly
-- **Youth Population**: 60% under 25 years old
+2. **Backend Services**
+   - Secure API endpoints
+   - Integration with Google's Vertex AI
+   - Data validation and error handling
 
-## Competitive Advantage
+3. **Security**
+   - Secure data handling
+   - Input validation
+   - Protected API endpoints
 
-1. **Localized Solution**
-   - Designed specifically for African healthcare challenges
-   - Works with low-bandwidth connections
-   - Supports multiple local languages
-   - Integrated with local payment systems (M-Pesa, Airtel Money, etc.)
+## Development Roadmap
 
-2. **Regulatory Compliance**
-   - Aligned with Kenya's Digital Health Strategy 2024-2030
-   - Compliant with Data Protection Act 2019
-   - Partnerships with Pharmacy and Poisons Board
+### Current Status (MVP)
+- Web-based medication identification tool
+- Basic search functionality by pill characteristics
+- Integration with Google's Vertex AI for image recognition
+- Responsive design for various devices
 
-3. **Affordable Pricing**
-   - Tiered subscription model
-   - Pay-as-you-go options
-   - Government and NGO partnership programs
+### Future Enhancements
+1. **Short-term (Next 3 months)**
+   - Expand medication database
+   - Improve image recognition accuracy
+   - Add user accounts for saving searches
 
-## Implementation Roadmap
+2. **Medium-term (3-6 months)**
+   - Implement basic medication interaction checking
+   - Add more detailed drug information
+   - Improve UI/UX based on user feedback
 
-### Phase 1: Kenya Launch (Months 1-6)
-- Launch mobile app on Android and iOS
-- Build database of 5,000+ medications commonly used in Kenya
-- Partner with Pharmacy and Poisons Board for verification
-- 10,000+ active users
+3. **Long-term (6+ months)**
+   - Explore mobile app development
+   - Consider additional features based on user needs
+   - Potential integration with healthcare systems
 
-### Phase 2: Regional Expansion (Months 7-18)
-- Add support for 5 major African languages
-- Expand database to 15,000+ medications
-- Partner with healthcare providers and pharmacies
-- 100,000+ active users
+## Potential Impact
 
-### Phase 3: Pan-African Scale (Months 19-36)
-- Cover 90% of medications in African markets
-- Implement offline functionality for rural areas
-- Integrate with national health systems
-- 1,000,000+ active users
+1. **For Healthcare Providers**
+   - Quick reference tool for medication identification
+   - Access to basic drug information
+   - Potential to reduce medication errors
 
-## Social Impact
+2. **For Patients**
+   - Easy access to medication information
+   - Help in identifying unknown medications
+   - Educational resource about prescribed drugs
 
-1. **Improved Medication Safety**
-   - 60% reduction in medication identification errors
-   - 40% decrease in adverse drug reactions through better identification and reporting
-   - 24/7 access to accurate medication information and safety alerts
-   - Direct reporting of adverse reactions to PPB for faster response and intervention
+3. **For the Community**
+   - Promotes medication safety awareness
+   - Contributes to better health literacy
+   - Foundation for future healthcare tools
 
-2. **Combating Counterfeits**
-   - 50% reduction in counterfeit medication use
-   - Real-time reporting of suspicious medications
-   - Verification of medication authenticity
+## Open Source Contribution
 
-3. **Health Outcomes**
-   - 45% improvement in medication adherence
-   - 35% reduction in medication-related hospitalizations
-   - Better management of chronic conditions
+PharmaLens is an open-source project that demonstrates:
+- Integration of modern web technologies
+- Implementation of AI/ML in healthcare
+- Best practices in web development
 
-## Financial Projections
+We welcome contributions from developers interested in healthcare technology and aim to build a community around medication safety.
 
-| Year | Revenue (KES) | Users | Healthcare Partners |
-|------|---------------|-------|---------------------|
-| 2024 | 50M           | 10K   | 50                  |
-| 2025 | 250M          | 100K  | 500                 |
-| 2026 | 1B+           | 1M    | 5,000              |
+## Get Involved
 
-## Investment Opportunity
+We welcome feedback, suggestions, and contributions to improve PharmaLens:
 
-We are seeking $2M in seed funding to:
-- Complete platform development
-- Obtain necessary certifications
-- Launch marketing campaigns
-- Build strategic partnerships
-- Expand the team
-
-## Why Invest in PharmaLensMediX?
-
-1. **Massive Market Need**
-   - Critical healthcare infrastructure gap
-   - Growing middle class demanding better healthcare
-   - Supportive government policies
-
-2. **Proven Team**
-   - Experienced healthcare professionals
-   - Tech experts with African market experience
-   - Strong advisory board
-
-3. **Scalable Solution**
-   - Cloud-based architecture
-   - Modular design for easy expansion
-   - Multiple revenue streams
-
-## Call to Action
-
-Join us in addressing Kenya's medication safety crisis. With 432 adverse drug reactions reported in just three months, the need for PharmaLensMediX has never been more urgent. Together, we can prevent medication errors, combat counterfeit drugs, and build a safer healthcare system for all Kenyans.
-
-**Contact Us:**
-- Email: info@pharmalensmedix.africa
-- Phone: +254 700 000000
-- Website:https://pharmalensmedix.web.app
+- **Try the application**: [Live Demo](https://pharmalensmedix.web.app)
+- **View the source code**: [GitHub Repository](https://github.com/secbyteX03/pharmalensmedix)
+- **Report issues**: Open an issue on GitHub
+- **Contribute**: Fork the repository and submit a pull request
 
 ---
-*"The right to health is a fundamental human right. PharmaLensMediX is making this right a reality for millions of Africans."*
+*"Improving medication safety through technology - one pill at a time."*
