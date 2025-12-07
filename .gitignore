@@ -1,57 +1,183 @@
-# Dependency directories
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Environment variables and config files
+.env
+.env.*
+!.env.example
+
+# Configuration files
+src/config.js
+src/config.*.js
+config/
+!config/example.*
+public/config.js
+public/js/config.js
+
+# Firebase
+.firebase/
+.firebaserc
+
+# Google Cloud
+*.key.json
+*.pem
+*.p12
+*.key
+*.cer
+*.crt
+*.csr
+*.p7b
+*.p7s
+*.p7c
+*.srl
+*.spl
+*.spc
+*.p8
+*.der
+
+# Dependencies
 node_modules/
 .pnp
 .pnp.js
 
-# Environment variables
-.env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
+# Testing
+coverage/
+.nyc_output/
 
-# Firebase cache
+# Build files
+dist/
+dist-ssr/
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Firebase
 .firebase/
 firebase-debug.log
 firebase-debug.*.log
 
-# Build files
-/dist
-/build
+# Firebase hosting cache
+.firebase/hosting.*
+
+# Firebase emulator cache
+.emulators/
+
+# Firebase config files
+firebase-config.js
+firebase-config.json
+
+# Local Netlify folder
+.netlify
+
+# Debug logs from Firebase CLI
+.firebase-debug.*
+
+# Local development files
+.firebase/hosting.*.cjs
+.firebase/hosting.*.cjs.map
+
+# Functions build output
+functions/lib/
+
+# Service account key (specific to your project)
+functions/service-account-key.json
+
+# Local development files
+.local-*
+
+# Build output
+.next/
+out/
+
+# Local development
+*.local
+
+# Sensitive files
+**/service-account-key.json
+**/*.key
+**/*.pem
+**/*.p12
+**/*.crt
+**/*.cer
+**/*.p7b
+**/*.p7s
+**/google-credentials.json
+
+# IDE and editor files
+.idea/
+.vscode/
+*.sublime-workspace
+*.sublime-project
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Debug logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Vercel
+.vercel
+
+# Vite
+.env
+.env.*
+!.env.example
 
 # Debug logs
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# Local development
+# Local env files
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Cache directories
 .cache/
+.temp/
+.tmp/
+.temp/
+
+# Editor directories and files
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# OS generated files
 .DS_Store
-
-# IDE specific files
-.idea/
-.vscode/
-*.swp
-*.swo
-
-# Firebase Hosting
-.hosting.cache
-
-# Local Firebase emulators
-.firebase/
-firestore-debug.log
-
-# Optional npm cache directory
-.npm
-
-# Optional REPL history
-.node_repl_history
-
-# Output of 'npm pack'
-*.tgz
-
-# Yarn Integrity file
-.yarn-integrity
-
-# Firebase client config
-public/js/firebase-config.js
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
