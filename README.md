@@ -10,7 +10,7 @@
 
 ## 🎥 Video Demonstration
 
-[![Watch the video](https://raw.githubusercontent.com/secbyteX03/pharmalensmedix/main/med-id-app/assets/videopreview.PNG)](https://drive.google.com/file/d/1NfQWIWnpb5AX9D8CMV9GS_5c_cCARCjA/view?usp=sharing)
+[![Watch the video](./assets/videopreview.PNG)](https://drive.google.com/file/d/1NfQWIWnpb5AX9D8CMV9GS_5c_cCARCjA/view?usp=sharing)
 
 *Click the image above to watch the demo video on Google Drive*
 
