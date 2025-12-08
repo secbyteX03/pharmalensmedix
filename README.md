@@ -12,7 +12,7 @@
 
 ## 🎥 Video Demonstration
 
-[![Watch the video](./assets/photo_upload_ui.PNG)](https://github.com/secbyteX03/pharmalensmedix/raw/main/med-id-app/assets/projectvideo.mp4)
+[![Watch the video](./assets/videopreview.PNG)](https://github.com/secbyteX03/pharmalensmedix/raw/main/med-id-app/assets/projectvideo.mp4)
 
 *Click the image above to watch the demo video (or [view directly on GitHub](https://github.com/secbyteX03/pharmalensmedix/raw/main/med-id-app/assets/projectvideo.mp4))*
 
@@ -45,11 +45,8 @@ Pharmalens Kenya is an innovative AI-powered medication identification platform 
 [View the detailed project proposal](proposal.md) to learn about the vision, goals, and implementation details of Pharmalens Kenya.
 
 ### Presentation
-[![View Presentation](./assets/Pharmalens.png)](https://docs.google.com/presentation/d/10yeDBLgg80KBhuZKO8YXmGkRf--Vm2it/edit?usp=sharing)
+[![View Presentation](./assets/powerpoint.png)](https://docs.google.com/presentation/d/10yeDBLgg80KBhuZKO8YXmGkRf--Vm2it/edit?usp=sharing)
 *Click the image above to view the full presentation on Google Slides*
-
-## 🚀 Live Demo
-[Access the Live Application](https://pharmalensmedix.web.app/)
 
 ## 🛠️ Tech Stack
 
