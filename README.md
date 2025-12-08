@@ -43,7 +43,7 @@ Pharmalens Kenya is an innovative AI-powered medication identification platform 
 [View the detailed project proposal](proposal.md) to learn about the vision, goals, and implementation details of Pharmalens Kenya.
 
 ### Presentation
-[![View Presentation](./assets/powerpoint.png)](https://docs.google.com/presentation/d/10yeDBLgg80KBhuZKO8YXmGkRf--Vm2it/edit?usp=sharing)
+[![View Presentation](./assets/powerpoint.PNG)](https://docs.google.com/presentation/d/10yeDBLgg80KBhuZKO8YXmGkRf--Vm2it/edit?usp=sharing)
 *Click the image above to view the full presentation on Google Slides*
 
 ## 🛠️ Tech Stack
