@@ -3,6 +3,7 @@
   <h1>Pharmalens Kenya - Smart Pill Identifier</h1>
   <p>AI-Powered Medication Identification System</p>
 
+  [![Live Demo](https://img.shields.io/badge/🌐_Live_Demo-4285F4?style=for-the-badge&logo=google-chrome&logoColor=white)](https://pharmalensmedix.web.app/)
   [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
   [![Open Source Love](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)](https://github.com/secbyteX03/pharmalensmedix/)
   [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
