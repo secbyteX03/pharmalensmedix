@@ -10,9 +10,9 @@
 
 ## 🎥 Video Demonstration
 
-[![Watch the video](./assets/videopreview.PNG)](https://github.com/secbyteX03/pharmalensmedix/raw/main/med-id-app/assets/projectvideo.mp4)
+[![Watch the video](https://raw.githubusercontent.com/secbyteX03/pharmalensmedix/main/med-id-app/assets/videopreview.PNG)](https://drive.google.com/file/d/1NfQWIWnpb5AX9D8CMV9GS_5c_cCARCjA/view?usp=sharing)
 
-*Click the image above to watch the demo video (or [view directly on GitHub](https://github.com/secbyteX03/pharmalensmedix/raw/main/med-id-app/assets/projectvideo.mp4))*
+*Click the image above to watch the demo video on Google Drive*
 
 ## 🌟 Overview
 
