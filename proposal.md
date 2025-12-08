@@ -36,11 +36,24 @@ PharmaLens is a web application that helps users identify medications through:
 
 ### Core Technologies
 
-- **Frontend**: HTML, CSS, JavaScript
-- **Backend**: Firebase Cloud Functions
-- **AI/ML**: Google Vertex AI integration
-- **Hosting**: Firebase Hosting
-- **Database**: Cloud Firestore
+- **Frontend**: 
+  - HTML5, CSS3, and modern JavaScript (ES6+)
+  - Vite.js for fast development and building
+  - Responsive design for all device sizes
+  
+- **Backend**: 
+  - Firebase Cloud Functions (TypeScript)
+  - Node.js runtime environment
+  - TypeScript for type safety and better development experience
+  
+- **AI/ML**: 
+  - Google Vertex AI integration
+  - Custom-trained models for medication identification
+  
+- **Infrastructure**:
+  - Firebase Hosting for web application
+  - Cloud Firestore for data storage
+  - Firebase Authentication for user management
 
 ### Key Features Implemented
 
@@ -51,9 +64,11 @@ PharmaLens is a web application that helps users identify medications through:
    - Clear display of results
 
 2. **Backend Services**
-   - Secure API endpoints
+   - TypeScript-based Firebase Cloud Functions
+   - Secure API endpoints with input validation
    - Integration with Google's Vertex AI
-   - Data validation and error handling
+   - Comprehensive error handling and logging
+   - Type-safe data processing
 
 3. **Security**
    - Secure data handling
