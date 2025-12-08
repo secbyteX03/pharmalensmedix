@@ -1,5 +1,6 @@
 <div align="center">
-  <h1>💊 Pharmalens Kenya - Smart Pill Identifier</h1>
+  <img src="./assets/logo.png" alt="Pharmalens Logo" width="80" style="margin-bottom: 10px;">
+  <h1>Pharmalens Kenya - Smart Pill Identifier</h1>
   <p>AI-Powered Medication Identification System</p>
   
   ![Pharmalens UI](./assets/main_ui.PNG)
@@ -13,7 +14,7 @@
 
 [![Watch the video](./assets/photo_upload_ui.PNG)](https://github.com/secbyteX03/pharmalensmedix/raw/main/med-id-app/assets/projectvideo.mp4)
 
-*Click the image above to watch the demo video*
+*Click the image above to watch the demo video (or [view directly on GitHub](https://github.com/secbyteX03/pharmalensmedix/raw/main/med-id-app/assets/projectvideo.mp4))*
 
 ## 🌟 Overview
 
@@ -37,7 +38,6 @@ Pharmalens Kenya is an innovative AI-powered medication identification platform 
     <p>Works seamlessly across all devices, from mobile phones to desktops.</p>
   </div>
 </div>
-Pharmalens Kenya is an AI-powered medication identification platform that helps users identify medications using images or manual input. This application leverages Google's Vertex AI to provide accurate medication information, including usage, side effects, and precautions.
 
 ## 📋 Project Documentation
 
@@ -45,19 +45,11 @@ Pharmalens Kenya is an AI-powered medication identification platform that helps 
 [View the detailed project proposal](proposal.md) to learn about the vision, goals, and implementation details of Pharmalens Kenya.
 
 ### Presentation
-[View the PowerPoint presentation](./assets/Pharmalens.pptx) for an overview of the project, including features, architecture, and demonstration.
+[![View Presentation](./assets/Pharmalens.png)](https://docs.google.com/presentation/d/10yeDBLgg80KBhuZKO8YXmGkRf--Vm2it/edit?usp=sharing)
+*Click the image above to view the full presentation on Google Slides*
 
 ## 🚀 Live Demo
 [Access the Live Application](https://pharmalensmedix.web.app/)
-
-## ✨ Features
-
-- **Image-Based Identification**: Upload a photo of a medication for instant identification
-- **Manual Search**: Search by imprint, color, and shape
-- **Comprehensive Drug Information**: Get detailed information about identified medications
-- **Responsive Design**: Works on desktop and mobile devices
-- **Secure Authentication**: Built with Firebase Authentication
-- **Real-time Database**: Cloud Firestore for data storage
 
 ## 🛠️ Tech Stack
 
@@ -73,33 +65,39 @@ Pharmalens Kenya is an AI-powered medication identification platform that helps 
   <img src="https://img.shields.io/badge/Vertex_AI-4285F4?style=for-the-badge&logo=google-cloud&logoColor=white" alt="Vertex AI">
 </div>
 
-- **Frontend**: 
-  - HTML5, CSS3, JavaScript (ES6+)
-  - [Vite](https://vitejs.dev/) - Fast frontend tooling
-  - [Font Awesome](https://fontawesome.com/) - Icons
+### Frontend
+- HTML5, CSS3, JavaScript (ES6+)
+- [Vite](https://vitejs.dev/) - Fast frontend tooling
+- [Font Awesome](https://fontawesome.com/) - Icons
+- Responsive design for all devices
 
-- **Backend**:
-  - [Firebase Functions](https://firebase.google.com/docs/functions)
-  - [Google Cloud Vertex AI](https://cloud.google.com/vertex-ai) - AI/ML Platform
-  - [Node.js](https://nodejs.org/) - JavaScript runtime
+### Backend
+- [Firebase Functions](https://firebase.google.com/docs/functions) (TypeScript)
+- [Google Cloud Vertex AI](https://cloud.google.com/vertex-ai) - AI/ML Platform
+- [Node.js](https://nodejs.org/) - JavaScript/TypeScript runtime
+- [TypeScript](https://www.typescriptlang.org/) - Type-safe JavaScript
 
-- **Hosting & Services**:
-  - [Firebase Hosting](https://firebase.google.com/docs/hosting)
-  - [Firebase Authentication](https://firebase.google.com/docs/auth)
-  - [Cloud Firestore](https://firebase.google.com/docs/firestore)
+### Hosting & Services
+- [Firebase Hosting](https://firebase.google.com/docs/hosting)
+- [Firebase Authentication](https://firebase.google.com/docs/auth)
+- [Cloud Firestore](https://firebase.google.com/docs/firestore)
 
 ## 🚀 Quick Start Guide
 
 ### Prerequisites
 
-Before you begin, ensure you have the following installed:
-
 - [Node.js](https://nodejs.org/) (v16 or later)
 - [npm](https://www.npmjs.com/) (v8 or later) or [Yarn](https://yarnpkg.com/)
 - [Firebase CLI](https://firebase.google.com/docs/cli)
 - [Git](https://git-scm.com/)
+- A Firebase project with the following services enabled:
+  - Firebase Authentication
+  - Cloud Firestore
+  - Cloud Functions
+  - Firebase Hosting
+- Google Cloud Project with Vertex AI API enabled
 
-### 🖥️ Local Development Setup
+### Local Development Setup
 
 1. **Clone the repository**
    ```bash
@@ -120,31 +118,30 @@ Before you begin, ensure you have the following installed:
 
 3. **Environment Setup**
    - Copy `.env.example` to `.env`
-   - Update the Firebase configuration with your project details
-   ```env
-   VITE_FIREBASE_API_KEY=your_api_key
-   VITE_FIREBASE_AUTH_DOMAIN=your_project_id.firebaseapp.com
-   VITE_FIREBASE_PROJECT_ID=your_project_id
-   VITE_FIREBASE_STORAGE_BUCKET=your_project_id.appspot.com
-   VITE_FIREBASE_MESSAGING_SENDER_ID=your_messaging_sender_id
-   VITE_FIREBASE_APP_ID=your_app_id
-   VITE_FIREBASE_MEASUREMENT_ID=your_measurement_id
-   ```
+   - Update the Firebase configuration with your project details:
+     ```env
+     VITE_FIREBASE_API_KEY=your_api_key
+     VITE_FIREBASE_AUTH_DOMAIN=your_project_id.firebaseapp.com
+     VITE_FIREBASE_PROJECT_ID=your_project_id
+     VITE_FIREBASE_STORAGE_BUCKET=your_project_id.appspot.com
+     VITE_FIREBASE_MESSAGING_SENDER_ID=your_messaging_sender_id
+     VITE_FIREBASE_APP_ID=your_app_id
+     VITE_FIREBASE_MEASUREMENT_ID=your_measurement_id
+     ```
 
 4. **Google Cloud Configuration**
    - Enable the Vertex AI API in your Google Cloud Console
    - Create a service account with appropriate permissions
    - Download the service account key as `service-account-key.json` in the `functions` directory
 
-### 🚀 Running the Application
-
-1. **Start the development server**
+5. **Running the Application**
    ```bash
+   # Start the development server
    npm run dev
    ```
    The application will be available at `http://localhost:5173`
 
-2. **Run Firebase emulators (optional)**
+6. **Firebase Emulators (optional)**
    ```bash
    firebase emulators:start
    ```
@@ -167,90 +164,7 @@ Before you begin, ensure you have the following installed:
   </div>
 </div>
 
-### Prerequisites
-
-- [Node.js](https://nodejs.org/) (v16 or later)
-- [npm](https://www.npmjs.com/) (v8 or later) or [Yarn](https://yarnpkg.com/)
-- [Firebase CLI](https://firebase.google.com/docs/cli)
-- A Firebase project with the following services enabled:
-  - Firebase Authentication
-  - Cloud Firestore
-  - Cloud Functions
-  - Firebase Hosting
-
-### Installation
-
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/secbyteX03/pharmalensmedix.git
-   cd pharmalensmedix/med-id-app
-   ```
-
-2. **Install dependencies**
-   ```bash
-   # Install root dependencies
-   npm install
-   
-   # Install functions dependencies
-   cd functions
-   npm install
-   cd ..
-   ```
-
-3. **Configure Firebase**
-   - Create a `.env` file in the root directory with your Firebase configuration:
-     ```env
-     VITE_FIREBASE_API_KEY=your_api_key
-     VITE_FIREBASE_AUTH_DOMAIN=your_project_id.firebaseapp.com
-     VITE_FIREBASE_PROJECT_ID=your_project_id
-     VITE_FIREBASE_STORAGE_BUCKET=your_project_id.appspot.com
-     VITE_FIREBASE_MESSAGING_SENDER_ID=your_messaging_sender_id
-     VITE_FIREBASE_APP_ID=your_app_id
-     VITE_FIREBASE_MEASUREMENT_ID=your_measurement_id
-     ```
-
-4. **Configure Google Cloud**
-   - Enable the Vertex AI API in your Google Cloud Console
-   - Set up a service account with appropriate permissions
-   - Download the service account key and save it as `service-account-key.json` in the `functions` directory
-
-### Running Locally
-
-1. **Start the development server**
-   ```bash
-   npm run dev
-   ```
-   This will start the Vite development server at `http://localhost:5173`
-
-2. **Run Firebase emulators (optional)**
-   ```bash
-   firebase emulators:start
-   ```
-
-### Building for Production
-
-1. **Build the application**
-   ```bash
-   npm run build
-   ```
-
-2. **Preview the production build**
-   ```bash
-   npm run preview
-   ```
-
-## 🚀 Deployment Guide
-
-### Prerequisites for Deployment
-
-- A Firebase project with the following services enabled:
-  - Firebase Authentication
-  - Cloud Firestore
-  - Cloud Functions
-  - Firebase Hosting
-- Google Cloud Project with Vertex AI API enabled
-
-### Deployment Steps
+## 🚀 Deployment
 
 1. **Build the application**
    ```bash
@@ -281,39 +195,39 @@ Before you begin, ensure you have the following installed:
 
 ```
 med-id-app/
-├── public/                 # Static files
-│   ├── assets/             # Images and icons
-│   ├── js/                 # JavaScript files
-│   │   ├── config.js       # Configuration settings
-│   │   └── firebase-config.js  # Firebase configuration
-│   └── index.html          # Main HTML file
-├── src/                    # Source files
-│   ├── config.js           # Application configuration
-│   └── config.example.js   # Example configuration
-├── assets/                 # Project assets
-│   └── manual_upload_ui.PNG  # Screenshot of manual upload UI
-│   └── photo_upload_ui.PNG   # Screenshot of photo upload UI
-│   └── projectvideo.mp4    # Demo video
-│   └── main_ui.PNG         # Main UI screenshot
+├── assets/                 # Project assets and screenshots
+│   ├── UI.PNG              # Application UI screenshot
+│   ├── UI-view.PNG         # UI view screenshot
+│   ├── UI_working.PNG      # Working UI state
+│   ├── logo.png            # Application logo
+│   ├── main_ui.PNG         # Main application interface
+│   ├── manual_upload_ui.PNG  # Manual upload interface
+│   ├── photo_upload_ui.PNG  # Photo upload interface
+│   ├── projectvideo.mp4    # Demo video
+│   └── [other image assets]
+├── dist/                   # Production build output
+│   └── assets/
+│       ├── logo-*.png      # Compiled logo assets
+│       └── main-*.js       # Compiled JavaScript
+│   └── index.html          # Production index file
 ├── functions/              # Cloud Functions
-│   ├── src/                # TypeScript source
 │   ├── lib/                # Compiled JavaScript
-│   └── package.json        # Dependencies
-├── .env.example           # Example environment variables
+│   │   ├── index.js        # Main functions entry
+│   │   └── index.js.map    # Source maps
+│   ├── node_modules/       # Dependencies
+│   └── package.json        # Function dependencies
 ├── .gitignore             # Git ignore rules
 ├── firebase.json          # Firebase configuration
 ├── firestore.rules        # Firestore security rules
+├── firestore-debug.log    # Debug logs
 ├── package.json           # Project dependencies
 ├── package-lock.json      # Dependency lock file
 ├── proposal.md            # Project proposal document
-├── README.md              # This file
-├── vite.config.js         # Vite configuration
-└── firestore-debug.log    # Debug log for Firestore
+├── README.md              # This documentation
+└── vite.config.js         # Vite configuration
 ```
 
 ## 🧪 Testing
-
-To run tests:
 
 ```bash
 # Run unit tests
@@ -322,21 +236,6 @@ npm test
 # Run end-to-end tests
 npm run test:e2e
 ```
-
-1. **Build the application**
-   ```bash
-   npm run build
-   ```
-
-2. **Deploy to Firebase**
-   ```bash
-   # Deploy everything
-   firebase deploy
-   
-   # Or deploy specific services
-   firebase deploy --only hosting
-   firebase deploy --only functions
-   ```
 
 ## 📱 Usage
 
@@ -391,6 +290,17 @@ We welcome contributions from the community! Here's how you can help:
    - Ensure all tests pass
    - Follow the existing code style
    - Update documentation as needed
+
+## 📞 Contact
+
+- 📧 Email: [faithmagret10@gmail.com](mailto:faithmagret10@gmail.com)
+- 🌐 Website: [Pharmalens Kenya](https://pharmalensmedix.web.app/)
+
+## 🙏 Acknowledgments
+
+- [Google Cloud](https://cloud.google.com/) for providing the Vertex AI platform
+- [Firebase](https://firebase.google.com/) for the amazing backend services
+- All open source contributors and the developer community
 
 Contributions are welcome! Please follow these steps:
 
